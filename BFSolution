@@ -1,0 +1,55 @@
+class Solution {
+    
+    public int[][] flag;
+    public char[][] record;
+    public int height = 0;
+    public int width = 0;
+    
+    public boolean search(int i, int j, String subword){
+        if(subword.length() == 1){
+            if(record[i][j] == subword.charAt(0)) return true;
+            else return false;
+        }
+        boolean ans = false;
+        if(subword.charAt(0) == record[i][j]){
+            flag[i][j] = 1;
+            subword = subword.substring(1);
+            
+            if(i - 1 >= 0 && flag[i-1][j] == 0 && !ans) ans = search(i - 1, j, subword);
+            if(ans) return ans;
+            
+            if(i + 1 < height && flag[i + 1][j] == 0 && !ans) ans = search(i + 1, j, subword);
+            if(ans) return ans;
+            
+            if(j - 1 >= 0 && flag[i][j - 1] == 0 && !ans) ans = search(i, j - 1, subword);
+            if(ans) return ans;
+            
+            if(j + 1 < width && flag[i][j + 1] == 0 && !ans) ans = search(i, j + 1, subword);
+            if(ans) return ans;
+            
+            flag[i][j] = 0;
+        }
+        return ans;
+    }
+    
+            
+    public boolean exist(char[][] board, String word) {
+        if(word.length() == 0) return false;
+        height = board.length;
+        width = board[0].length;
+        flag = new int[height][width];
+        record = board;
+        boolean ans = false;
+        for(int i=0; i<height; i++){
+            for(int j=0; j<width; j++){
+                if(ans) return ans;
+                if(board[i][j] == word.charAt(0) && !ans){
+                    flag[i][j] = 1;
+                    ans = search(i, j, word);
+                    flag[i][j] = 0;
+                }
+            }
+        }
+        return ans;
+    }
+}
